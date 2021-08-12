@@ -1,8 +1,5 @@
 const initState = {
-	brands: {
-		allBrands: {},
-		outputBrands: {},
-	},
+	brands: [],
 };
 
 export default initState;

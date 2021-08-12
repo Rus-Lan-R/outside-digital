@@ -1,15 +1,19 @@
 import React from "react";
 import "../../Brands.css";
 
-export default function BrandsItem({ brandsGroup }) {
+export default function BrandsItem({ _id, title, main, hide, isOpen }) {
+	console.log(isOpen, hide);
 	return (
 		<>
-			{brandsGroup.map((el, index) => (
-				<li key={el._id} className="brands-list">
-					<span>{el.title}</span>
-					<span>(main: {el.main.toString()})</span>
-				</li>
-			))}
+			<li
+				key={_id}
+				className="brands-list"
+				style={isOpen ? { display: "" } : hide ? { display: "none" } : { display: "" }}
+			>
+				<span>{title}</span>
+				<span>(main: {main.toString()})</span>
+				<span>{hide.toString()}</span>
+			</li>
 		</>
 	);
 }
