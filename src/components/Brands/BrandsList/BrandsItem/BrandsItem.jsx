@@ -1,28 +1,15 @@
 import React from "react";
+import "../../Brands.css";
 
-export default function BrandsItem({ brandsGroup, isTrue }) {
+export default function BrandsItem({ brandsGroup }) {
 	return (
 		<>
-			{isTrue
-				? brandsGroup.map(
-						(el) =>
-							el.main && (
-								<li key={el._id}>
-									<span>{el.title}</span>
-									<span>(main: {el.main.toString()})</span>
-								</li>
-							),
-				  )
-				: brandsGroup.map(
-						(el, index) =>
-							index < 5 && (
-								<li key={el._id}>
-									{" "}
-									<span>{el.title}</span>
-									<span>(main: {el.main.toString()})</span>
-								</li>
-							),
-				  )}
+			{brandsGroup.map((el, index) => (
+				<li key={el._id} className="brands-list">
+					<span>{el.title}</span>
+					<span>(main: {el.main.toString()})</span>
+				</li>
+			))}
 		</>
 	);
 }

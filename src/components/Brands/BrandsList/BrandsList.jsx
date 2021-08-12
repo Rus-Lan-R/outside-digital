@@ -1,59 +1,43 @@
-import React, { useEffect, useState } from "react";
+import "../Brands.css";
+import React, { useEffect } from "react";
 import BrandsItem from "./BrandsItem/BrandsItem";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getBrandsFromServer } from "../../../redux/actions/brands.action";
+import { getBrandsFromServer, foldCurrentBrandGroup } from "../../../redux/actions/brands.action";
 
 export default function BrandsList() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		console.log("sls");
 		dispatch(getBrandsFromServer());
 	}, []);
-	const brands = useSelector((state) => state.brands);
-
-	// const intialSortBrands = (obj) => {
-	// 	const sortedObj = {};
-	// 	for (let key in obj) {
-	// 		// let countTrueValues = 0;
-	// 		sortedObj[key] = obj[key].sort((a, b) => {
-	// 			if (a.main !== b.main) {
-	// 				return b.main - a.main;
-	// 			} else {
-	// 				return a.title.localeCompare(b, undefined, { sensitivity: "base" });
-	// 			}
-	// 		});
-	// 	}
-	// 	return sortedObj;
-	// };
-
-	// const groupBrandsByFirstChar = (array) =>
-	// 	array.reduce((el, current) => {
-	// 		el[current.title.charAt(0).toUpperCase()]
-	// 			? el[current.title.charAt(0).toUpperCase()].push(current)
-	// 			: // : (el[current.title.charAt(0).toUpperCase()] = [current]);
-	// 			  (el[current.title.charAt(0).toUpperCase()] = [current]);
-
-	// 		return el;
-	// 	}, {}); // function
+	const brands = useSelector((state) => state.brands?.outputBrands);
+	const allBrands = useSelector((state) => state.brands?.allBrands);
 
 	return (
-		<div>
-			{Object.keys(brands).map((el) => (
-				<>
-					<ul>
-						<div>
-							{el} ({brands[el].length})
-						</div>
-						{brands[el].some((el) => el.main) ? (
-							<BrandsItem brandsGroup={brands[el]} isTrue={true} />
-						) : (
-							<BrandsItem brandsGroup={brands[el]} isTrue={false} />
-						)}
-					</ul>
-				</>
-			))}
-		</div>
+		<>
+			{Object.keys(brands).length ? (
+				Object.keys(brands)?.map(
+					(el) =>
+						brands[el].length > 0 && (
+							<div className="container">
+								<ul>
+									<div>
+										{el} ({allBrands[el]?.length})
+										<input
+											type="button"
+											value=">>"
+											onClick={() => dispatch(foldCurrentBrandGroup(el))}
+										/>
+									</div>
+									<BrandsItem brandsGroup={brands[el]} />
+								</ul>
+							</div>
+						),
+				)
+			) : (
+				<p>Ничего не найдено</p>
+			)}
+		</>
 	);
 }

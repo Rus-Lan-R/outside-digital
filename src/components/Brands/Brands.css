@@ -1,0 +1,31 @@
+.container {
+	margin-left: auto;
+	margin-right: auto;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 5px;
+}
+
+.input-field {
+	margin-left: 1em;
+	padding: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+ul {
+	list-style: " - ";
+	margin: 5px;
+	padding: 0;
+}
+
+.brands-list {
+	display: "flex";
+	justify-content: "space-between";
+	align-items: "center";
+	padding: ".5rem 1rem";
+	border: "1px solid #ccc";
+	border-radius: "4px";
+	margin-bottom: ".5rem";
+}
