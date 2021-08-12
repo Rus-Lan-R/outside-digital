@@ -2,7 +2,6 @@ import React from "react";
 import "../../Brands.css";
 
 export default function BrandsItem({ _id, title, main, hide, isOpen }) {
-	console.log(isOpen, hide);
 	return (
 		<>
 			<li
@@ -12,7 +11,6 @@ export default function BrandsItem({ _id, title, main, hide, isOpen }) {
 			>
 				<span>{title}</span>
 				<span>(main: {main.toString()})</span>
-				<span>{hide.toString()}</span>
 			</li>
 		</>
 	);

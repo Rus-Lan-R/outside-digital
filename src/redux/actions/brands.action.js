@@ -1,9 +1,8 @@
 import {
 	SET_ALL_BRANDS,
-	SET_OUTPUT_BRANDS,
-	CHANGE_SORT_TYPE,
+	REVERSE_BRANDS_SORT,
 	FOLD_CURRENT_BRAND_GROUP,
-	FIND_BRAND,
+	SEARCH_BRANDS,
 } from "../types/brandsTypes";
 import * as endPoints from "../../config/endPoints";
 import axios from "axios";
@@ -27,22 +26,17 @@ export const setBrands = (brands) => ({
 	payload: brands,
 });
 
-export const setOutputBrands = (brands) => ({
-	type: SET_OUTPUT_BRANDS,
-	payload: brands,
-});
-
 export const foldCurrentBrandGroup = (keyBrendGroup) => ({
 	type: FOLD_CURRENT_BRAND_GROUP,
 	payload: keyBrendGroup,
 });
 
-export const changeSortType = ({ reverse }) => ({
-	type: CHANGE_SORT_TYPE,
+export const reverseSort = ({ reverse }) => ({
+	type: REVERSE_BRANDS_SORT,
 	payload: reverse,
 });
 
 export const findBrand = (findText, checkRegister) => ({
-	type: FIND_BRAND,
+	type: SEARCH_BRANDS,
 	payload: { findText, checkRegister },
 });

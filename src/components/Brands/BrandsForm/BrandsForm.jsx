@@ -1,14 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { changeSortType, findBrand } from "../../../redux/actions/brands.action";
+import { reverseSort, findBrand } from "../../../redux/actions/brands.action";
 import "../Brands.css";
 
 export default function BrandsForm() {
 	const dispatch = useDispatch();
-
-	// const [inputValue, setInputValue] = useState("");
-	const [checkRegister, setCheckRegister] = useState(true);
+	const [checkRegister, setCheckRegister] = useState(false);
 
 	const changeFindTetx = (event) => {
 		dispatch(findBrand(event.target.value.trim(), checkRegister));
@@ -24,16 +22,8 @@ export default function BrandsForm() {
 				onChange={changeFindTetx}
 				placeholder="Search.."
 			/>
-			<input
-				type="button"
-				value="A-Z"
-				onClick={() => dispatch(changeSortType({ reverse: true }))}
-			/>
-			<input
-				type="button"
-				value="Z-A"
-				onClick={() => dispatch(changeSortType({ reverse: false }))}
-			/>
+			<input type="button" value="A-Z" onClick={() => dispatch(reverseSort({ reverse: false }))} />
+			<input type="button" value="Z-A" onClick={() => dispatch(reverseSort({ reverse: true }))} />
 			<div>
 				<button name="button" onClick={() => setCheckRegister((prev) => !prev)}>
 					{checkRegister ? "Aa" : "aa"}
