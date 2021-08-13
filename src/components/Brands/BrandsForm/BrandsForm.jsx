@@ -38,7 +38,7 @@ export default function BrandsForm() {
 					onChange={() => setMain((prev) => !prev)}
 				/>
 
-				<input type="submit" value="add brand" />
+				<input type="submit" value="add" />
 			</form>
 		</div>
 	);

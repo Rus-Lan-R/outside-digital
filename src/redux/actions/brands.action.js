@@ -5,6 +5,7 @@ import {
 	SEARCH_BRANDS,
 	DELETE_BRANDS,
 	ADD_NEW_BRAND,
+	UPDATE_BRAND,
 } from "../types/brandsTypes";
 import * as endPoints from "../../config/endPoints";
 
@@ -13,9 +14,10 @@ export const getBrandsFromServer = () => async (dispatch) => {
 		const response = await fetch(endPoints.getBrandsApi());
 
 		if (response.ok) {
+			//если ответ от сервера 2хх то изменяем стейт
 			const data = await response.json();
 
-			const brands = data.map((el) => ({ ...el, hide: false }));
+			const brands = data.map((el) => ({ ...el, hide: false })); //hide:false нужен для отображения в short view
 			dispatch(setBrands(brands));
 		}
 	} catch (error) {
@@ -34,6 +36,7 @@ export const addBrandToServer = (payload) => async (dispatch) => {
 			body: JSON.stringify(payload),
 		});
 		if (response.ok) {
+			//если ответ от сервера 2хх то изменяем стейт
 			const newBrand = await response.json();
 			dispatch(addNewBrand(newBrand));
 		}
@@ -43,9 +46,9 @@ export const addBrandToServer = (payload) => async (dispatch) => {
 	}
 };
 
-export const updateBrandOnServer = (_id, payload) => async (dispatch) => {
+export const updateBrandOnServer = (payload) => async (dispatch) => {
 	try {
-		const response = await fetch(endPoints.updateBrandApi(_id), {
+		const response = await fetch(endPoints.updateBrandApi(payload._id), {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -53,7 +56,8 @@ export const updateBrandOnServer = (_id, payload) => async (dispatch) => {
 			body: JSON.stringify(payload),
 		});
 		if (response.ok) {
-			dispatch(deleteBrand(_id));
+			//если ответ от сервера 2хх то изменяем стейт
+			dispatch(updateBrand(payload));
 		}
 	} catch (error) {
 		console.error(error);
@@ -70,6 +74,7 @@ export const deleteBrandFromServer = (_id) => async (dispatch) => {
 			},
 		});
 		if (response.ok) {
+			//если ответ от сервера 2хх то изменяем стейт
 			dispatch(deleteBrand(_id));
 		}
 	} catch (error) {
@@ -88,13 +93,18 @@ export const addNewBrand = (newBrand) => ({
 	payload: newBrand,
 });
 
+export const updateBrand = (payload) => ({
+	type: UPDATE_BRAND,
+	payload,
+});
+
 export const deleteBrand = (_id) => ({
 	type: DELETE_BRANDS,
 	payload: _id,
 });
 export const foldCurrentBrandGroup = (keyBrandGroup) => ({
 	type: FOLD_CURRENT_BRAND_GROUP,
-	payload: keyBrandGroup,
+	payload: keyBrandGroup, //первая буква группы массива объектов которые надо развернуть или свернуть
 });
 
 export const reverseSort = ({ reverse }) => ({

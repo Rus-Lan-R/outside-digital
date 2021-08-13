@@ -1,9 +1,11 @@
 import "../Brands.css";
 import React, { useEffect } from "react";
-import BrandsItem from "./BrandsItem/BrandsItem";
 import { useDispatch, useSelector } from "react-redux";
 import { reverseSort } from "../../../redux/actions/brands.action";
 import { getBrandsFromServer, foldCurrentBrandGroup } from "../../../redux/actions/brands.action";
+
+import BrandsItem from "../BrandsItem/BrandsItem";
+import BrandsForm from "../BrandsForm/BrandsForm";
 
 export default function BrandsList() {
 	const dispatch = useDispatch();
@@ -16,6 +18,7 @@ export default function BrandsList() {
 
 	return (
 		<div className="container">
+			<BrandsForm />
 			<input type="button" value="A-Z" onClick={() => dispatch(reverseSort({ reverse: false }))} />
 			<input type="button" value="Z-A" onClick={() => dispatch(reverseSort({ reverse: true }))} />
 			{brands.length ? (

@@ -4,6 +4,7 @@ import {
 	FOLD_CURRENT_BRAND_GROUP,
 	DELETE_BRANDS,
 	ADD_NEW_BRAND,
+	UPDATE_BRAND,
 } from "../types/brandsTypes";
 
 const brandsReducer = (state = {}, action) => {
@@ -15,7 +16,6 @@ const brandsReducer = (state = {}, action) => {
 			const updatetdBrandsList = groupedBrands.map((el) => [...el, { isOpen: false }]); // добавляю флаг с помощью которого буду разврачивать список
 
 			// подготовка списка для вывода (если есть хоть один элемент с атрибутом main:true, то вывожу только те где main true) иначе вывожу первые 5
-
 			updatetdBrandsList.forEach((group) => {
 				if (group[1].some((el) => el.main)) {
 					let countTrue = 0;
@@ -33,19 +33,36 @@ const brandsReducer = (state = {}, action) => {
 				}
 			});
 
-			return updatetdBrandsList;
+			return updatetdBrandsList; // стейт в  виде двумерного массива
+		//  [["A",[{_id:1, title:"asdds"},{_id:2, title:"addklsd"}]
+		//   ["B",[{_id:4, title:"bsdds"},{_id:6, title:"bddklsd"}]
+		//   ["C,"[{_id:23, title:"Csdds"},{_id:62, title:"cddklsd"}]]
 
 		case ADD_NEW_BRAND: {
 			const copyBrands = [...state];
 			const firstCharNewBrand = payload.title.charAt(0).toLowerCase();
 			const newBrand = { ...payload, hide: false }; //hide:false нужен для отображения в short view
 			const index = copyBrands.findIndex((el) => el[0] === firstCharNewBrand);
+			//ищу индекс в двумерном массиве который соответсвует первой букве заголовка
 
 			if (index !== -1) {
 				copyBrands[index][1].push({ ...payload, hide: false });
 			} else {
 				copyBrands.push([firstCharNewBrand, [newBrand], { isOpen: false }]);
 			}
+			return copyBrands;
+		}
+
+		case UPDATE_BRAND: {
+			const copyBrands = [...state];
+
+			copyBrands.forEach((group) => {
+				let index = group[1].findIndex((el) => el._id === payload._id);
+				if (index !== -1) {
+					group[1][index] = { ...payload, hiden: false };
+				}
+			});
+
 			return copyBrands;
 		}
 
@@ -84,16 +101,15 @@ const brandsReducer = (state = {}, action) => {
 			sortedGroupBrands.forEach((group) => {
 				group[1] = sortArray(group[1], "title", reverse);
 			});
-
 			return sortedGroupBrands;
 		}
-
 		default:
 			return state;
 	}
 };
 
 const groupBrandsByFirstChar = (array) => {
+	// функция которая группирует массивы по первым буквам
 	const groupBrandsObj = array.reduce((el, current) => {
 		el[current.title.charAt(0).toLowerCase()]
 			? el[current.title.charAt(0).toLowerCase()].push(current)
@@ -102,7 +118,7 @@ const groupBrandsByFirstChar = (array) => {
 		return el;
 	}, {});
 
-	return Object.entries(groupBrandsObj);
+	return Object.entries(groupBrandsObj); // делаем из объекта массив
 };
 
 const sortArray = (array, key, reverse) => {
