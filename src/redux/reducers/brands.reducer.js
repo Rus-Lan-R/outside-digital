@@ -2,7 +2,8 @@ import {
 	REVERSE_BRANDS_SORT,
 	SET_ALL_BRANDS,
 	FOLD_CURRENT_BRAND_GROUP,
-	SEARCH_BRANDS,
+	DELETE_BRANDS,
+	ADD_NEW_BRAND,
 } from "../types/brandsTypes";
 
 const brandsReducer = (state = {}, action) => {
@@ -13,30 +14,61 @@ const brandsReducer = (state = {}, action) => {
 			const groupedBrands = groupBrandsByFirstChar(sortedArrayBrands); // функция группирует массив объектов в двумерный массив, где первый элемент это первая буква текста в titlt  //=> ["A",[{_id:1, title:"asdds"},{_id:2, title:"addklsd"}]]
 			const updatetdBrandsList = groupedBrands.map((el) => [...el, { isOpen: false }]); // добавляю флаг с помощью которого буду разврачивать список
 
-			updatetdBrandsList.forEach((el) => {
-				// подготовка списка для вывода (если есть хоть один элемент с атрибутом main:true, то вывожу только те где main true) иначе вывожу первые 5
-				if (el[1].some((el) => el.main)) {
+			// подготовка списка для вывода (если есть хоть один элемент с атрибутом main:true, то вывожу только те где main true) иначе вывожу первые 5
+
+			updatetdBrandsList.forEach((group) => {
+				if (group[1].some((el) => el.main)) {
 					let countTrue = 0;
-					el[1].forEach((el) => {
-						if (el.main && countTrue++ < 5) {
-							el.hide = false;
+					group[1].forEach((brand) => {
+						if (brand.main && countTrue++ < 5) {
+							brand.hide = false;
 						} else {
-							el.hide = true;
+							brand.hide = true;
 						}
 					});
 				} else {
-					return el[1].forEach((_, index) => (index < 5 ? (el.hide = true) : (el.hide = false)));
+					group[1].forEach((brand, index) =>
+						index < 5 ? (brand.hide = false) : (brand.hide = true),
+					);
 				}
 			});
 
 			return updatetdBrandsList;
 
-		case FOLD_CURRENT_BRAND_GROUP: {
-			let copyBrands = [...state];
+		case ADD_NEW_BRAND: {
+			const copyBrands = [...state];
+			const firstCharNewBrand = payload.title.charAt(0).toLowerCase();
+			const newBrand = { ...payload, hide: false }; //hide:false нужен для отображения в short view
+			const index = copyBrands.findIndex((el) => el[0] === firstCharNewBrand);
 
-			copyBrands.forEach((el) => {
-				if (el[0] === payload) {
-					el[2] = !el[2];
+			if (index !== -1) {
+				copyBrands[index][1].push({ ...payload, hide: false });
+			} else {
+				copyBrands.push([firstCharNewBrand, [newBrand], { isOpen: false }]);
+			}
+			return copyBrands;
+		}
+
+		case DELETE_BRANDS: {
+			const copyBrands = [...state];
+
+			copyBrands.forEach((group) => {
+				let index = group[1].findIndex((el) => el._id === payload);
+				if (index !== -1) {
+					group[1].splice(index, 1);
+				}
+			});
+
+			return copyBrands;
+		}
+
+		case FOLD_CURRENT_BRAND_GROUP: {
+			const copyBrands = [...state];
+			const keyBrandGroup = payload;
+
+			copyBrands.forEach((group) => {
+				if (group[0] === keyBrandGroup) {
+					group[2].isOpen = !group[2].isOpen;
 				}
 			});
 
@@ -44,7 +76,6 @@ const brandsReducer = (state = {}, action) => {
 		}
 
 		case REVERSE_BRANDS_SORT: {
-			console.log(payload);
 			const reverse = payload;
 			const copyBrands = [...state];
 
@@ -54,40 +85,7 @@ const brandsReducer = (state = {}, action) => {
 				group[1] = sortArray(group[1], "title", reverse);
 			});
 
-			console.log(sortedGroupBrands);
-
 			return sortedGroupBrands;
-		}
-
-		case SEARCH_BRANDS: {
-			const { findText, checkRegister } = payload;
-
-			let copyBrands = [...state];
-
-			copyBrands.forEach((group) => {
-				//первым циклом ищу группу брендов,объединные по первой букве
-				group[2] = false;
-				group[1].forEach((el) => {
-					if (group[0] === findText.charAt(0).toLowerCase()) {
-						if (
-							(el.title.match(findText) && checkRegister) ||
-							(el.title.toLowerCase().match(findText.toLowerCase()) && !checkRegister)
-						) {
-						}
-						// затем ищу совпадение в массиве объектов по ключу title
-						if (el.title.match(findText)) {
-							el.hide = false;
-						} else el.hide = true;
-					} else {
-						el.hide = true;
-					}
-					if (!findText.charAt(0).toLowerCase()) {
-						el.hide = false;
-					}
-				});
-			});
-
-			return copyBrands;
 		}
 
 		default:

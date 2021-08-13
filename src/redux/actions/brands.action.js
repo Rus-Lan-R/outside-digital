@@ -3,22 +3,79 @@ import {
 	REVERSE_BRANDS_SORT,
 	FOLD_CURRENT_BRAND_GROUP,
 	SEARCH_BRANDS,
+	DELETE_BRANDS,
+	ADD_NEW_BRAND,
 } from "../types/brandsTypes";
 import * as endPoints from "../../config/endPoints";
-import axios from "axios";
 
-export const getBrandsFromServer = () => (dispatch) => {
-	axios
-		.get("https://recruting-test-api.herokuapp.com/api/v1/brands")
-		.then(({ data }) => {
+export const getBrandsFromServer = () => async (dispatch) => {
+	try {
+		const response = await fetch(endPoints.getBrandsApi());
+
+		if (response.ok) {
+			const data = await response.json();
+
 			const brands = data.map((el) => ({ ...el, hide: false }));
-
 			dispatch(setBrands(brands));
-		})
-		.catch((error) => {
-			console.error(error);
-			alert(error);
+		}
+	} catch (error) {
+		console.error(error);
+		alert(error);
+	}
+};
+
+export const addBrandToServer = (payload) => async (dispatch) => {
+	try {
+		const response = await fetch(endPoints.addBrandApi(), {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(payload),
 		});
+		if (response.ok) {
+			const newBrand = await response.json();
+			dispatch(addNewBrand(newBrand));
+		}
+	} catch (error) {
+		console.error(error);
+		alert(error);
+	}
+};
+
+export const updateBrandOnServer = (_id, payload) => async (dispatch) => {
+	try {
+		const response = await fetch(endPoints.updateBrandApi(_id), {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(payload),
+		});
+		if (response.ok) {
+			dispatch(deleteBrand(_id));
+		}
+	} catch (error) {
+		console.error(error);
+		alert(error);
+	}
+};
+
+export const deleteBrandFromServer = (_id) => async (dispatch) => {
+	try {
+		const response = await fetch(endPoints.deleteBrandApi(_id), {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (response.ok) {
+			dispatch(deleteBrand(_id));
+		}
+	} catch (error) {
+		console.error(error);
+		alert(error);
+	}
 };
 
 export const setBrands = (brands) => ({
@@ -26,9 +83,18 @@ export const setBrands = (brands) => ({
 	payload: brands,
 });
 
-export const foldCurrentBrandGroup = (keyBrendGroup) => ({
+export const addNewBrand = (newBrand) => ({
+	type: ADD_NEW_BRAND,
+	payload: newBrand,
+});
+
+export const deleteBrand = (_id) => ({
+	type: DELETE_BRANDS,
+	payload: _id,
+});
+export const foldCurrentBrandGroup = (keyBrandGroup) => ({
 	type: FOLD_CURRENT_BRAND_GROUP,
-	payload: keyBrendGroup,
+	payload: keyBrandGroup,
 });
 
 export const reverseSort = ({ reverse }) => ({

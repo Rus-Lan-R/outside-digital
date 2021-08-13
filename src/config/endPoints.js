@@ -1,25 +1,7 @@
-const { REACT_APP_API_URL: host } = process.env;
+export const getBrandsApi = () => `https://recruting-test-api.herokuapp.com/api/v1/brands`;
+export const addBrandApi = () => `https://recruting-test-api.herokuapp.com/api/v1/brands`;
+export const updateBrandApi = (_id) =>
+	`https://recruting-test-api.herokuapp.com/api/v1/brand/${_id}`;
 
-export const signUp = () => `${host}/api/auth/signup`;
-export const signIn = () => `${host}/api/auth/signin`;
-export const signOut = () => `${host}/api/auth/signout`;
-export const checkAuth = () => `${host}/api/auth/check`;
-
-export const getAllUsers = () => `${host}/api/users`;
-
-export const editUser = (id) => `${host}/api/users/${id}`;
-export const getUser = (id) => `${host}/api/users/${id}`;
-
-export const getTodos = (id) => `${host}/api/notebook/note/${id}/todo`;
-export const getTodo = (id) => `${host}/api/notebook/note/${id}/todo`;
-
-export const getNote = () => `${host}/api/notebook/note`;
-
-// export const signUp = () => `${host}/api/v1/auth/signup`
-// export const signIn = () => `${host}/api/v1/auth/signin`
-// export const signOut = () =>`${host}/api/v1/auth/signout`
-// export const checkAuth = () => `${host}/api/v1/auth/check`
-
-// export const getAllUsers = () => `${host}/api/v1/users`
-// export const editUser = (id) => `${host}/api/v1/users/${id}`
-// export const getUser = (id) => `${host}/api/v1/users/${id}`
+export const deleteBrandApi = (_id) =>
+	`https://recruting-test-api.herokuapp.com/api/v1/brand/${_id}`;
