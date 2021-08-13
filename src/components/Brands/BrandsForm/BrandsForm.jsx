@@ -10,7 +10,7 @@ export default function BrandsForm() {
 
 	const [title, setTitle] = useState("");
 	const [main, setMain] = useState(true);
-	// если создавать с полем main:false появляется ошибка 4222
+	// если создавать с полем main:false появляется ошибка 422
 	// пробовал через Swagger там также
 	// Swagger: https://app.swaggerhub.com/apis/K5921/brands/1.0.0-oas3
 
