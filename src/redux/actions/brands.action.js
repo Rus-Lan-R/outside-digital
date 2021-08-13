@@ -19,7 +19,7 @@ export const getBrandsFromServer = () => async (dispatch) => {
 
 			const brands = data.map((el) => ({ ...el, hide: false })); //hide:false нужен для отображения в short view
 			dispatch(setBrands(brands));
-		}
+		} else alert(`ERROR - ${response.status}`);
 	} catch (error) {
 		console.error(error);
 		alert(error);
@@ -39,7 +39,7 @@ export const addBrandToServer = (payload) => async (dispatch) => {
 			//если ответ от сервера 2хх то изменяем стейт
 			const newBrand = await response.json();
 			dispatch(addNewBrand(newBrand));
-		}
+		} else alert(`ERROR - ${response.status}`);
 	} catch (error) {
 		console.error(error);
 		alert(error);
@@ -58,7 +58,7 @@ export const updateBrandOnServer = (payload) => async (dispatch) => {
 		if (response.ok) {
 			//если ответ от сервера 2хх то изменяем стейт
 			dispatch(updateBrand(payload));
-		}
+		} else alert(`ERROR - ${response.status}`);
 	} catch (error) {
 		console.error(error);
 		alert(error);
@@ -76,7 +76,7 @@ export const deleteBrandFromServer = (_id) => async (dispatch) => {
 		if (response.ok) {
 			//если ответ от сервера 2хх то изменяем стейт
 			dispatch(deleteBrand(_id));
-		}
+		} else alert(`ERROR - ${response.status}`);
 	} catch (error) {
 		console.error(error);
 		alert(error);
