@@ -26,6 +26,9 @@ export const getBrandsFromServer = () => async (dispatch) => {
 	}
 };
 
+// если создавать с полем main:false появляется ошибка 4222
+// пробовал через Swagger там также
+// Swagger: https://app.swaggerhub.com/apis/K5921/brands/1.0.0-oas3
 export const addBrandToServer = (payload) => async (dispatch) => {
 	try {
 		const response = await fetch(endPoints.addBrandApi(), {

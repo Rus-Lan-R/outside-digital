@@ -9,7 +9,7 @@ export default function BrandsForm() {
 	const dispatch = useDispatch();
 
 	const [title, setTitle] = useState("");
-	const [main, setMain] = useState(false);
+	const [main, setMain] = useState(true);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
